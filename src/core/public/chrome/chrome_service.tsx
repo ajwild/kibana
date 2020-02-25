@@ -105,9 +105,8 @@ export class ChromeService {
    *      reset the visibility whenever the next application is mounted
    *   3. Having "embed" in the query string
    */
-  private initVisibility(application: StartDeps['application']) {
+  private initVisibility(application: StartDeps['application'], isEmbedded: boolean) {
     // Start off the chrome service hidden if "embed" is in the hash query string.
-    const isEmbedded = 'embed' in parse(location.hash.slice(1), true).query;
     this.isForceHidden$ = new BehaviorSubject(isEmbedded);
 
     const appHidden$ = merge(
@@ -138,7 +137,9 @@ export class ChromeService {
     notifications,
     uiSettings,
   }: StartDeps): Promise<InternalChromeStart> {
-    this.initVisibility(application);
+    const isEmbedded = 'embed' in parse(location.hash.slice(1), true).query;
+
+    this.initVisibility(application, isEmbedded);
 
     const appTitle$ = new BehaviorSubject<string>('Kibana');
     const brand$ = new BehaviorSubject<ChromeBrand>({});
@@ -178,6 +179,8 @@ export class ChromeService {
       navLinks,
       recentlyAccessed,
       docTitle,
+
+      isEmbedded,
 
       getHeaderComponent: () => (
         <React.Fragment>
@@ -309,6 +312,8 @@ export interface ChromeStart {
   recentlyAccessed: ChromeRecentlyAccessed;
   /** {@inheritdoc ChromeDocTitle} */
   docTitle: ChromeDocTitle;
+
+  isEmbedded: boolean;
 
   /**
    * Sets the current app's title
