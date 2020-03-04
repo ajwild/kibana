@@ -24,6 +24,7 @@ import { EuiIcon, EuiFlexGroup, EuiFlexItem, EuiText } from '@elastic/eui';
 
 export interface ExitFullScreenButtonProps {
   onExitFullScreenMode: () => void;
+  toggleChrome?: boolean;
 }
 
 class ExitFullScreenButtonUi extends PureComponent<ExitFullScreenButtonProps> {
