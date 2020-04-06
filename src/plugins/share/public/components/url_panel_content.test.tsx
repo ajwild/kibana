@@ -24,7 +24,6 @@ import { shallow } from 'enzyme';
 
 import { UrlPanelContent } from './url_panel_content';
 
-const URL_PARAM_EXTENSIONS_SELECTOR = '[data-test-subj="urlParamExtensions"]';
 const defaultProps = {
   allowShortUrl: true,
   objectType: 'dashboard',
@@ -49,14 +48,12 @@ test('should hide short url section when allowShortUrl is false', () => {
   expect(component).toMatchSnapshot();
 });
 
-test('should show url param checkboxes when embedded link', () => {
-  const component = shallow(<UrlPanelContent {...defaultProps} isEmbedded={true} objectId="id1" />);
-  expect(component.find(URL_PARAM_EXTENSIONS_SELECTOR).length).toBe(1);
-  expect(component).toMatchSnapshot();
-});
-
-test('should not show url param checkboxes when permalink', () => {
-  const component = shallow(<UrlPanelContent {...defaultProps} objectId="id1" />);
-  expect(component.find(URL_PARAM_EXTENSIONS_SELECTOR).length).toBe(0);
+test('should show url param extensions', () => {
+  const TestExtension = () => <div data-test-subj="testExtension" />;
+  const extensions = [{ paramName: 'testExtension', component: TestExtension }];
+  const component = shallow(
+    <UrlPanelContent {...defaultProps} urlParamExtensions={extensions} objectId="id1" />
+  );
+  expect(component.find('TestExtension').length).toBe(1);
   expect(component).toMatchSnapshot();
 });
